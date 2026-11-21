@@ -1,0 +1,60 @@
+---
+name: realmarketapi-plain-language-explainer
+description: "Explains what a market reading means in simple terms for a beginner, using the live value as the example. Use when the user is new to trading or asks what an indicator or term means."
+license: MIT
+metadata:
+  author: RealMarketAPI
+  version: "1.0.0"
+  category: reporting-content
+  role: "Market reporter"
+---
+
+# Plain-Language Explainer
+
+Explains what a market reading means in simple terms for a beginner, using the live value as the example. Use when the user is new to trading or asks what an indicator or term means.
+
+## Example requests
+
+- "What does RSI 72 on gold mean?"
+- "Explain support and resistance to me."
+
+## Data sources
+
+| MCP tool | REST equivalent |
+|---|---|
+| `get_price` | `GET /api/v1/price` |
+| `get_rsi` | `GET /api/v1/indicator/rsi` |
+| `get_insight_trend` | `GET /api/v1/insight/trend` |
+
+## Workflow
+
+1. Identify the concept and fetch one live example of it.
+2. Explain it in two or three sentences without jargon, then show the live number and what it says right now.
+3. Give one common mistake beginners make with it.
+
+## Output
+
+- A short explanation with a live example.
+- One pitfall and one next concept to learn.
+
+## Avoid
+
+- Explaining with more jargon.
+- Turning an explanation into a trade recommendation.
+
+## Access
+
+- **MCP server** (Pro plan and above): `https://ai.realmarketapi.com/mcp?apiKey=YOUR_API_KEY` (Streamable HTTP).
+- **REST**: `https://api.realmarketapi.com/api/v1/<route>`, authenticated with the `apiKey` query parameter. Query parameters are camelCase (`symbolCode`, `timeFrame`, `period`, `startTime`, `endTime`, `pageNumber`, `pageSize`).
+- **WebSocket** (Plus plan and above): `wss://api.realmarketapi.com/<stream>?apiKey=YOUR_API_KEY&symbolCode=SYMBOL&timeFrame=TF`.
+- **Timeframes**: `M1, M5, M15, H1, H4, D1`. The Free plan covers 6 symbols on `M1, M5, H1`.
+- **Plan gates**: indicators, insight and market-structure routes need Pro or above; volatility and history need Starter or above. Call `GET /api/v1/me` to see the plan, symbols, timeframes and remaining quota for a key.
+- Never print, log or commit an API key. Read it from an environment variable or the client's secret store.
+- Full schemas: <https://realmarketapi.com/.well-known/openapi.json>. Docs: <https://realmarketapi.com/en-US/docs>.
+
+## Guardrails
+
+- Fetch fresh data for every answer and quote the candle `openTime` (UTC) the numbers come from. Never invent or estimate a value the API did not return.
+- If a call fails, read `errors[].errorCode` from the `application/problem+json` body, say what failed, and continue with what you have instead of guessing.
+- RealMarketAPI provides market data and analytics only. It does not place orders, hold funds or supply news, fundamentals or order-book depth.
+- Output is informational, not investment advice. State the invalidation level and the main risk with any directional view.

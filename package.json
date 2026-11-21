@@ -1,0 +1,12 @@
+{
+  "name": "realmarketapi-agent-skills",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Agent Skills for RealMarketAPI: market data, technical analysis, risk, strategy, quant research, monitoring and integration workflows for AI agents.",
+  "type": "module",
+  "license": "MIT",
+  "homepage": "https://realmarketapi.com/en-US/docs/skills",
+  "repository": { "type": "git", "url": "git+https://github.com/Phideround/realmarketapi-agent-skills.git" },
+  "scripts": { "build": "node scripts/build.mjs" },
+  "engines": { "node": ">=20" }
+}

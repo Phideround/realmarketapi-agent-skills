@@ -1,0 +1,1704 @@
+{
+  "version": "1.0.0",
+  "repository": "https://github.com/Phideround/realmarketapi-agent-skills",
+  "total": 161,
+  "categories": [
+    {
+      "id": "foundations",
+      "title": "Foundations",
+      "role": "Any agent",
+      "description": "Setup, routing, plan awareness and data hygiene that every other skill builds on.",
+      "skills": [
+        {
+          "name": "realmarketapi-skills-catalog",
+          "title": "Skills Catalog",
+          "description": "Routes a market question to the right RealMarketAPI skill or sequence of skills. Use first when a request could be served by several skills or when you are unsure which one applies.",
+          "tools": []
+        },
+        {
+          "name": "realmarketapi-quickstart",
+          "title": "Quickstart",
+          "description": "Connects an agent to RealMarketAPI over MCP or REST and verifies the connection with a first live call. Use when setting up a new agent, a new API key, or when no RealMarketAPI call has succeeded yet in the session.",
+          "tools": [
+            "get_symbols",
+            "get_price",
+            "GET /me"
+          ]
+        },
+        {
+          "name": "realmarketapi-plan-and-quota-check",
+          "title": "Plan and Quota Check",
+          "description": "Reads the plan, allowed symbols, timeframes, history range and request usage for an API key and adapts the workflow to them. Use before a large batch of calls or when a request is rejected for plan or quota reasons.",
+          "tools": [
+            "GET /me"
+          ]
+        },
+        {
+          "name": "realmarketapi-symbol-resolver",
+          "title": "Symbol Resolver",
+          "description": "Maps everyday instrument names such as gold, bitcoin, cable or the S&P 500 to exact RealMarketAPI symbol codes. Use when the user names an asset in plain language or uses a broker-specific ticker.",
+          "tools": [
+            "get_symbols"
+          ]
+        },
+        {
+          "name": "realmarketapi-timeframe-selector",
+          "title": "Timeframe Selector",
+          "description": "Chooses the analysis, execution and trigger timeframes that fit a trading horizon and the timeframes a plan allows. Use when the user gives no timeframe or describes a horizon such as scalp, intraday or swing.",
+          "tools": [
+            "get_timeframes",
+            "GET /me"
+          ]
+        },
+        {
+          "name": "realmarketapi-error-recovery",
+          "title": "Error Recovery",
+          "description": "Diagnoses failed RealMarketAPI calls from the problem+json body and chooses the right recovery. Use when a call returns a 4xx or 5xx status, an empty data array, or a tool error.",
+          "tools": [
+            "GET /health",
+            "GET /me"
+          ]
+        },
+        {
+          "name": "realmarketapi-request-budgeting",
+          "title": "Request Budgeting",
+          "description": "Plans the smallest set of calls that answers a question and avoids waste on a metered plan. Use before multi-symbol scans, loops, scheduled jobs or any task that could spend more than about twenty requests.",
+          "tools": [
+            "GET /me",
+            "GET /price/market",
+            "GET /price/24hr"
+          ]
+        },
+        {
+          "name": "realmarketapi-data-freshness-check",
+          "title": "Data Freshness Check",
+          "description": "Verifies that returned prices are current by comparing candle timestamps with the clock and the market schedule. Use before quoting a live price, after a weekend or holiday, or when numbers look stale.",
+          "tools": [
+            "get_price",
+            "GET /market-calendar"
+          ]
+        },
+        {
+          "name": "realmarketapi-answer-guardrails",
+          "title": "Answer Guardrails",
+          "description": "Applies a final quality and safety pass to any market answer: sourced numbers, stated uncertainty, risk wording and no promises. Use before sending analysis, signals or trade ideas to an end user.",
+          "tools": []
+        }
+      ]
+    },
+    {
+      "id": "market-data",
+      "title": "Market Data Analyst",
+      "role": "Market data analyst",
+      "description": "Live quotes, snapshots, candles, history and descriptive statistics.",
+      "skills": [
+        {
+          "name": "realmarketapi-market-context",
+          "title": "Market Context",
+          "description": "Builds a quick picture of where a symbol stands right now: last price, 24h baseline, recent candles and position in the day's range. Use first, before deeper technical, risk or decision skills.",
+          "tools": [
+            "get_price",
+            "get_baseline_candles",
+            "get_candles"
+          ]
+        },
+        {
+          "name": "realmarketapi-live-price-quote",
+          "title": "Live Price Quote",
+          "description": "Returns the latest price, bid, ask and spread for one symbol. Use when the user only wants the current price or a quick quote.",
+          "tools": [
+            "get_price"
+          ]
+        },
+        {
+          "name": "realmarketapi-market-snapshot",
+          "title": "Market Snapshot",
+          "description": "Summarises every symbol on the plan in one call with hourly and daily change. Use when the user asks how the market is doing overall or wants a cross-asset overview.",
+          "tools": [
+            "GET /price/market"
+          ]
+        },
+        {
+          "name": "realmarketapi-category-snapshot",
+          "title": "Category Snapshot",
+          "description": "Summarises one asset class such as forex, crypto, stocks, indices or commodities. Use when the user asks about a single market segment rather than one symbol or the whole market.",
+          "tools": [
+            "GET /price/category"
+          ]
+        },
+        {
+          "name": "realmarketapi-daily-stats-24h",
+          "title": "24-Hour Statistics",
+          "description": "Reports 24-hour open, high, low, volume and percentage change per symbol. Use when the user asks for the day's range, 24h change or 24h volume.",
+          "tools": [
+            "GET /price/24hr"
+          ]
+        },
+        {
+          "name": "realmarketapi-top-movers",
+          "title": "Top Movers",
+          "description": "Ranks the biggest gainers and losers over the last 24 hours. Use when the user asks what is moving, what is hot, or wants ideas to look at.",
+          "tools": [
+            "GET /price/24hr"
+          ]
+        },
+        {
+          "name": "realmarketapi-candle-reader",
+          "title": "Candle Reader",
+          "description": "Reads recent OHLCV candles and describes price action in plain language. Use when the user asks what price has been doing over the last few bars or sessions.",
+          "tools": [
+            "get_candles"
+          ]
+        },
+        {
+          "name": "realmarketapi-historical-data-pull",
+          "title": "Historical Data Pull",
+          "description": "Downloads paged historical candles for a date range and returns a clean, ordered dataset. Use when the user needs past data for charts, research, backtests or exports.",
+          "tools": [
+            "get_history",
+            "GET /me"
+          ]
+        },
+        {
+          "name": "realmarketapi-spread-monitor",
+          "title": "Spread Monitor",
+          "description": "Measures the bid-ask spread of a symbol and tells whether it is normal or wide. Use when the user asks about trading cost, liquidity or whether now is a good time to execute.",
+          "tools": [
+            "get_price",
+            "WSS /price"
+          ]
+        },
+        {
+          "name": "realmarketapi-volume-analysis",
+          "title": "Volume Analysis",
+          "description": "Compares current volume with its recent average and relates it to price movement. Use when the user asks whether a move has participation behind it or wants relative volume.",
+          "tools": [
+            "get_candles"
+          ]
+        },
+        {
+          "name": "realmarketapi-price-change-calculator",
+          "title": "Price Change Calculator",
+          "description": "Calculates the absolute and percentage change of a symbol between two points in time. Use when the user asks how much something moved over a period such as this week, this month or since a date.",
+          "tools": [
+            "get_history",
+            "get_price"
+          ]
+        },
+        {
+          "name": "realmarketapi-cross-asset-comparison",
+          "title": "Cross-Asset Comparison",
+          "description": "Compares the performance of several symbols over the same window on a normalised basis. Use when the user asks which asset did better or wants to compare instruments side by side.",
+          "tools": [
+            "get_history",
+            "GET /price/24hr"
+          ]
+        },
+        {
+          "name": "realmarketapi-range-statistics",
+          "title": "Range Statistics",
+          "description": "Computes average daily range, typical session range and how much of today's range is already used. Use when the user asks how far a symbol usually moves or whether today's move is stretched.",
+          "tools": [
+            "get_history",
+            "get_candles",
+            "get_atr"
+          ]
+        },
+        {
+          "name": "realmarketapi-gap-detector",
+          "title": "Gap Detector",
+          "description": "Finds price gaps between one candle's close and the next open, including weekend gaps. Use when the user asks about gaps, weekend opens or unfilled gaps.",
+          "tools": [
+            "get_history",
+            "get_candles"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "technical-analysis",
+      "title": "Technical Analyst",
+      "role": "Technical analyst",
+      "description": "Indicator reads, levels, patterns and multi-timeframe alignment.",
+      "skills": [
+        {
+          "name": "realmarketapi-technical-analysis",
+          "title": "Technical Analysis",
+          "description": "Produces a complete technical read of one symbol from trend, momentum, levels and sentiment. Use when the user asks for chart analysis, a technical view or a bias on a symbol.",
+          "tools": [
+            "get_candles",
+            "get_ema",
+            "get_rsi",
+            "get_macd",
+            "get_support_resistance",
+            "get_sentiment"
+          ]
+        },
+        {
+          "name": "realmarketapi-trend-identification",
+          "title": "Trend Identification",
+          "description": "Determines direction and strength of the trend on one timeframe. Use when the user asks whether a symbol is trending, which way, or how strongly.",
+          "tools": [
+            "get_ema",
+            "get_adx",
+            "get_insight_trend"
+          ]
+        },
+        {
+          "name": "realmarketapi-moving-average-analysis",
+          "title": "Moving Average Analysis",
+          "description": "Reads SMA, EMA and WMA values, their slopes, stacking and crossovers. Use when the user asks about moving averages, crossovers or dynamic support and resistance.",
+          "tools": [
+            "get_sma",
+            "get_ema",
+            "GET /indicator/wma"
+          ]
+        },
+        {
+          "name": "realmarketapi-rsi-analysis",
+          "title": "RSI Analysis",
+          "description": "Interprets the Relative Strength Index for momentum, overbought and oversold conditions and regime. Use when the user asks about RSI or whether a symbol is overbought or oversold.",
+          "tools": [
+            "get_rsi",
+            "get_candles"
+          ]
+        },
+        {
+          "name": "realmarketapi-macd-analysis",
+          "title": "MACD Analysis",
+          "description": "Interprets MACD line, signal line and histogram for momentum shifts. Use when the user asks about MACD, momentum turning or a crossover signal.",
+          "tools": [
+            "get_macd"
+          ]
+        },
+        {
+          "name": "realmarketapi-bollinger-bands-analysis",
+          "title": "Bollinger Bands Analysis",
+          "description": "Reads Bollinger Bands for volatility state, squeezes and band position. Use when the user asks about Bollinger Bands, a squeeze or whether price is stretched.",
+          "tools": [
+            "get_bollinger_bands",
+            "get_candles"
+          ]
+        },
+        {
+          "name": "realmarketapi-stochastic-analysis",
+          "title": "Stochastic Analysis",
+          "description": "Interprets the Stochastic oscillator %K and %D for short-term turning points. Use when the user asks about Stochastic readings or timing inside a range.",
+          "tools": [
+            "get_stochastic",
+            "get_adx"
+          ]
+        },
+        {
+          "name": "realmarketapi-adx-trend-strength",
+          "title": "ADX Trend Strength",
+          "description": "Measures trend strength and directional dominance with ADX, +DI and -DI. Use when the user asks how strong a trend is or whether to use trend or range tactics.",
+          "tools": [
+            "get_adx"
+          ]
+        },
+        {
+          "name": "realmarketapi-cci-analysis",
+          "title": "CCI Analysis",
+          "description": "Interprets the Commodity Channel Index for momentum bursts and extremes. Use when the user asks about CCI or wants a momentum trigger for commodities and indices.",
+          "tools": [
+            "get_cci"
+          ]
+        },
+        {
+          "name": "realmarketapi-williams-r-analysis",
+          "title": "Williams %R Analysis",
+          "description": "Interprets Williams %R for overbought and oversold timing. Use when the user asks about Williams %R or wants a fast oscillator for entries.",
+          "tools": [
+            "get_williams_r"
+          ]
+        },
+        {
+          "name": "realmarketapi-atr-analysis",
+          "title": "ATR Analysis",
+          "description": "Reads Average True Range to size expected movement on a timeframe. Use when the user asks how volatile a symbol is in price terms or needs a unit for stops and targets.",
+          "tools": [
+            "get_atr",
+            "get_price"
+          ]
+        },
+        {
+          "name": "realmarketapi-fibonacci-levels",
+          "title": "Fibonacci Levels",
+          "description": "Retrieves Fibonacci retracement and extension levels for the current swing. Use when the user asks for Fibonacci levels, pullback zones or extension targets.",
+          "tools": [
+            "get_fibonacci",
+            "get_support_resistance"
+          ]
+        },
+        {
+          "name": "realmarketapi-support-resistance-mapping",
+          "title": "Support and Resistance Mapping",
+          "description": "Maps the nearest support and resistance levels around current price and ranks them. Use when the user asks for key levels, where price may react, or where to set alerts.",
+          "tools": [
+            "get_support_resistance",
+            "get_price",
+            "get_liquidity_zones"
+          ]
+        },
+        {
+          "name": "realmarketapi-momentum-oscillator-consensus",
+          "title": "Momentum Oscillator Consensus",
+          "description": "Polls RSI, Stochastic, CCI and Williams %R and reports whether they agree. Use when the user asks if a symbol is overbought or oversold and wants more than one oscillator.",
+          "tools": [
+            "get_rsi",
+            "get_stochastic",
+            "get_cci",
+            "get_williams_r"
+          ]
+        },
+        {
+          "name": "realmarketapi-divergence-detector",
+          "title": "Divergence Detector",
+          "description": "Finds regular and hidden divergence between price swings and RSI or MACD. Use when the user asks about divergence or early signs that a move is weakening.",
+          "tools": [
+            "get_candles",
+            "get_rsi",
+            "get_macd"
+          ]
+        },
+        {
+          "name": "realmarketapi-candlestick-patterns",
+          "title": "Candlestick Patterns",
+          "description": "Detects common candlestick patterns in recent closed candles and rates them by location. Use when the user asks about candle patterns or a reversal or continuation signal on the latest bars.",
+          "tools": [
+            "get_candles",
+            "get_support_resistance"
+          ]
+        },
+        {
+          "name": "realmarketapi-chart-pattern-scout",
+          "title": "Chart Pattern Scout",
+          "description": "Looks for classical chart structures such as double tops and bottoms, triangles, flags and head and shoulders in candle data. Use when the user asks whether a chart pattern is forming.",
+          "tools": [
+            "get_candles",
+            "get_history"
+          ]
+        },
+        {
+          "name": "realmarketapi-multi-timeframe",
+          "title": "Multi-Timeframe Analysis",
+          "description": "Checks trend alignment from the highest to the lowest timeframe in one pass. Use when the user asks for a top-down view or whether timeframes agree.",
+          "tools": [
+            "get_multi_timeframe",
+            "get_insight_trend",
+            "get_support_resistance"
+          ]
+        },
+        {
+          "name": "realmarketapi-indicator-confluence",
+          "title": "Indicator Confluence",
+          "description": "Scores how many independent technical factors agree on direction. Use when the user asks how strong a setup is or wants a confluence check before acting.",
+          "tools": [
+            "get_insight_confluence",
+            "get_ema",
+            "get_rsi",
+            "get_macd",
+            "get_adx",
+            "get_support_resistance"
+          ]
+        },
+        {
+          "name": "realmarketapi-pivot-points",
+          "title": "Pivot Points",
+          "description": "Calculates classic daily pivot levels from the previous day's candle. Use when the user asks for pivots, daily levels or intraday reference points.",
+          "tools": [
+            "get_history",
+            "get_price"
+          ]
+        },
+        {
+          "name": "realmarketapi-golden-death-cross",
+          "title": "Golden and Death Cross",
+          "description": "Checks the 50 and 200 period SMA relationship on the daily chart. Use when the user asks about a golden cross, a death cross or the long-term trend filter.",
+          "tools": [
+            "get_sma"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "risk-volatility",
+      "title": "Risk and Volatility Manager",
+      "role": "Risk manager",
+      "description": "Volatility regimes, position sizing, stops, targets and portfolio risk.",
+      "skills": [
+        {
+          "name": "realmarketapi-volatility-regime",
+          "title": "Volatility Regime",
+          "description": "Classifies current volatility as low, normal or high from ATR percent and Bollinger width. Use when the user asks how volatile a symbol is or before choosing stop distance and position size.",
+          "tools": [
+            "get_volatility",
+            "get_atr"
+          ]
+        },
+        {
+          "name": "realmarketapi-volatility-spike-alert",
+          "title": "Volatility Spike Detection",
+          "description": "Finds candles where ATR spiked above a multiple of its norm. Use when the user asks whether there was a volatility shock or wants to review abnormal bars.",
+          "tools": [
+            "get_volatility_spikes",
+            "GET /market-calendar"
+          ]
+        },
+        {
+          "name": "realmarketapi-volatility-heatmap-timing",
+          "title": "Volatility Heatmap Timing",
+          "description": "Uses the day-of-week by hour-of-day volatility heatmap to find the most and least active trading windows. Use when the user asks when a symbol moves most or when to schedule trading.",
+          "tools": [
+            "get_volatility_heatmap"
+          ]
+        },
+        {
+          "name": "realmarketapi-position-sizing",
+          "title": "Position Sizing",
+          "description": "Calculates position size from account balance, risk percentage and stop distance. Use when the user asks how much to trade or how many lots, units or shares to take.",
+          "tools": [
+            "get_price",
+            "get_atr"
+          ]
+        },
+        {
+          "name": "realmarketapi-stop-loss-placement",
+          "title": "Stop-Loss Placement",
+          "description": "Proposes a stop-loss level from structure, volatility and known stop-hunt zones. Use when the user has an entry idea and asks where the stop should go.",
+          "tools": [
+            "get_atr",
+            "get_support_resistance",
+            "get_stop_hunt_zones"
+          ]
+        },
+        {
+          "name": "realmarketapi-take-profit-targets",
+          "title": "Take-Profit Targets",
+          "description": "Sets profit targets from opposing structure, Fibonacci extensions and liquidity zones. Use when the user asks where to take profit or how to scale out.",
+          "tools": [
+            "get_support_resistance",
+            "get_fibonacci",
+            "get_liquidity_zones",
+            "get_atr"
+          ]
+        },
+        {
+          "name": "realmarketapi-risk-reward-evaluator",
+          "title": "Risk-Reward Evaluator",
+          "description": "Computes reward-to-risk for a proposed entry, stop and target and the win rate needed to break even. Use when the user gives trade levels and asks whether the trade is worth taking.",
+          "tools": [
+            "get_price",
+            "get_atr"
+          ]
+        },
+        {
+          "name": "realmarketapi-trade-risk-check",
+          "title": "Pre-Trade Risk Check",
+          "description": "Runs a pre-trade checklist across manipulation risk, anomalies, volatility and scheduled events. Use immediately before entering a trade or approving a signal.",
+          "tools": [
+            "get_manipulation_risk",
+            "get_anomaly",
+            "get_volatility",
+            "GET /market-calendar"
+          ]
+        },
+        {
+          "name": "realmarketapi-drawdown-analysis",
+          "title": "Drawdown Analysis",
+          "description": "Measures maximum drawdown, current drawdown and recovery time of a symbol or an equity series. Use when the user asks how bad the worst decline was or how deep the current pullback is.",
+          "tools": [
+            "get_history"
+          ]
+        },
+        {
+          "name": "realmarketapi-correlation-matrix",
+          "title": "Correlation Matrix",
+          "description": "Computes return correlations between symbols over a chosen window. Use when the user asks whether assets move together or wants to avoid doubling the same exposure.",
+          "tools": [
+            "get_history"
+          ]
+        },
+        {
+          "name": "realmarketapi-portfolio-exposure",
+          "title": "Portfolio Exposure",
+          "description": "Aggregates open positions into net exposure by currency, asset class and direction. Use when the user lists positions and asks about concentration or total risk.",
+          "tools": [
+            "GET /price/market",
+            "get_atr"
+          ]
+        },
+        {
+          "name": "realmarketapi-value-at-risk",
+          "title": "Value at Risk",
+          "description": "Estimates historical one-day value at risk and expected shortfall for a position or small portfolio. Use when the user asks how much could be lost on a bad day.",
+          "tools": [
+            "get_history",
+            "get_price"
+          ]
+        },
+        {
+          "name": "realmarketapi-margin-and-leverage",
+          "title": "Margin and Leverage",
+          "description": "Calculates required margin, effective leverage and distance to a margin call for a position. Use when the user asks about margin, leverage or how much room a position has.",
+          "tools": [
+            "get_price"
+          ]
+        },
+        {
+          "name": "realmarketapi-trailing-stop-manager",
+          "title": "Trailing Stop Manager",
+          "description": "Proposes trailing-stop updates for an open position using ATR and structure. Use when the user is in a profitable trade and asks how to trail the stop.",
+          "tools": [
+            "get_atr",
+            "get_candles",
+            "get_support_resistance"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "market-structure",
+      "title": "Market Structure Analyst",
+      "role": "Market structure analyst",
+      "description": "Liquidity, stop hunts, order flow, anomalies and smart-money concepts.",
+      "skills": [
+        {
+          "name": "realmarketapi-liquidity-zones",
+          "title": "Liquidity Zones",
+          "description": "Maps clusters of resting liquidity above and below price. Use when the user asks where liquidity sits, where price is likely to be drawn, or for liquidity-based targets.",
+          "tools": [
+            "get_liquidity_zones",
+            "get_price"
+          ]
+        },
+        {
+          "name": "realmarketapi-stop-hunt-zones",
+          "title": "Stop-Hunt Zones",
+          "description": "Identifies areas beyond key levels where stop orders are likely clustered and exposed to a sweep. Use when the user asks about stop hunts, fake-outs or safe stop placement.",
+          "tools": [
+            "get_stop_hunt_zones",
+            "get_support_resistance"
+          ]
+        },
+        {
+          "name": "realmarketapi-orderflow-imbalance",
+          "title": "Order Flow Imbalance",
+          "description": "Reads bullish versus bearish candle dominance and imbalance zones. Use when the user asks who is in control, buyers or sellers, or wants order-flow confirmation.",
+          "tools": [
+            "get_orderflow_imbalance",
+            "WSS /orderflow/imbalance"
+          ]
+        },
+        {
+          "name": "realmarketapi-anomaly-detection",
+          "title": "Anomaly Detection",
+          "description": "Flags sudden price spikes and unusual volume in recent candles. Use when the user asks what just happened, whether a move is abnormal, or as a safety check.",
+          "tools": [
+            "get_anomaly",
+            "get_candles",
+            "GET /market-calendar"
+          ]
+        },
+        {
+          "name": "realmarketapi-manipulation-risk",
+          "title": "Manipulation Risk",
+          "description": "Reports the current manipulation risk level for a symbol and what drives it. Use when the user asks whether price action is trustworthy or before trading thin conditions.",
+          "tools": [
+            "get_manipulation_risk",
+            "get_anomaly"
+          ]
+        },
+        {
+          "name": "realmarketapi-market-structure-bos",
+          "title": "Market Structure: BOS and CHoCH",
+          "description": "Labels swing structure, breaks of structure and changes of character from candle data. Use when the user asks about market structure, BOS, CHoCH or higher highs and lower lows.",
+          "tools": [
+            "get_candles",
+            "get_multi_timeframe"
+          ]
+        },
+        {
+          "name": "realmarketapi-fair-value-gaps",
+          "title": "Fair Value Gaps",
+          "description": "Finds three-candle price imbalances that have not been filled. Use when the user asks about fair value gaps, FVGs or imbalance entries.",
+          "tools": [
+            "get_candles",
+            "get_orderflow_imbalance"
+          ]
+        },
+        {
+          "name": "realmarketapi-order-blocks",
+          "title": "Order Blocks",
+          "description": "Locates the last opposing candle before a strong displacement move as a potential reaction zone. Use when the user asks about order blocks or institutional entry zones.",
+          "tools": [
+            "get_candles",
+            "get_liquidity_zones",
+            "get_atr"
+          ]
+        },
+        {
+          "name": "realmarketapi-liquidity-sweep-setup",
+          "title": "Liquidity Sweep Setup",
+          "description": "Detects a sweep of a stop-hunt zone followed by a reclaim of the level. Use when the user asks about a sweep entry, a fake breakout or a stop-run reversal.",
+          "tools": [
+            "get_stop_hunt_zones",
+            "get_candles",
+            "get_orderflow_imbalance",
+            "get_manipulation_risk"
+          ]
+        },
+        {
+          "name": "realmarketapi-smart-money-narrative",
+          "title": "Smart Money Narrative",
+          "description": "Combines structure, liquidity, imbalances and order flow into one coherent story of what price is doing and where it is drawn next. Use when the user asks for an ICT or SMC style read.",
+          "tools": [
+            "get_multi_timeframe",
+            "get_liquidity_zones",
+            "get_stop_hunt_zones",
+            "get_orderflow_imbalance",
+            "get_candles"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "signals-insight",
+      "title": "Signal and Insight Analyst",
+      "role": "Signal analyst",
+      "description": "Composite scores, setups, next-candle bias, sentiment and final decisions.",
+      "skills": [
+        {
+          "name": "realmarketapi-insight-score",
+          "title": "Insight Score",
+          "description": "Reads the composite bullish or bearish score from 0 to 100 for a symbol. Use when the user wants one number for how bullish or bearish something is.",
+          "tools": [
+            "get_insight_score"
+          ]
+        },
+        {
+          "name": "realmarketapi-insight-trend",
+          "title": "Insight Trend",
+          "description": "Returns the classified trend direction from StrongUptrend to StrongDowntrend. Use when the user wants a quick trend label without computing indicators.",
+          "tools": [
+            "get_insight_trend"
+          ]
+        },
+        {
+          "name": "realmarketapi-insight-setup",
+          "title": "Insight Setup",
+          "description": "Identifies the current setup type as Breakout, Pullback or Range. Use when the user asks what kind of setup is on the chart or which playbook applies.",
+          "tools": [
+            "get_insight_setup"
+          ]
+        },
+        {
+          "name": "realmarketapi-insight-next-candle",
+          "title": "Next-Candle Bias",
+          "description": "Reads the next-candle directional bias with its supporting indicators and levels. Use when the user asks what the next bar is likely to do or wants a short-horizon read.",
+          "tools": [
+            "get_insight_next"
+          ]
+        },
+        {
+          "name": "realmarketapi-insight-confluence",
+          "title": "Insight Confluence",
+          "description": "Returns the combined Buy, Sell or Neutral signal from all insight components. Use when the user wants a single consolidated signal for a symbol and timeframe.",
+          "tools": [
+            "get_insight_confluence",
+            "get_insight_score"
+          ]
+        },
+        {
+          "name": "realmarketapi-strategy-signal",
+          "title": "Strategy Signal",
+          "description": "Retrieves the Signal Lab strategy signal with confidence, risk level, invalidation price and reasons. Use when the user asks for a ready-made trade signal with a defined invalidation.",
+          "tools": [
+            "GET /signals/strategy"
+          ]
+        },
+        {
+          "name": "realmarketapi-sentiment-analysis",
+          "title": "Sentiment Analysis",
+          "description": "Reads trend direction, market sentiment and the Fear and Greed score for a symbol. Use when the user asks about sentiment, fear and greed, or wants to confirm or challenge a technical view.",
+          "tools": [
+            "get_sentiment",
+            "get_insight_score"
+          ]
+        },
+        {
+          "name": "realmarketapi-signal-validation",
+          "title": "Signal Validation",
+          "description": "Cross-checks a trade signal from any source against independent data and risk conditions. Use when the user brings a signal or an idea and asks whether it holds up.",
+          "tools": [
+            "get_insight_confluence",
+            "get_multi_timeframe",
+            "get_manipulation_risk",
+            "get_support_resistance",
+            "GET /market-calendar"
+          ]
+        },
+        {
+          "name": "realmarketapi-trading-decision",
+          "title": "Trading Decision",
+          "description": "Turns context, analysis and risk into a final bias with entry zone, invalidation, targets and confidence. Use at the end of an analysis chain when the user asks what to do.",
+          "tools": [
+            "get_price",
+            "get_insight_confluence",
+            "get_multi_timeframe",
+            "get_support_resistance",
+            "get_atr",
+            "get_manipulation_risk"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "trading-strategies",
+      "title": "Trader",
+      "role": "Trader",
+      "description": "Style playbooks, rule-based strategies, trade plans, management and journaling.",
+      "skills": [
+        {
+          "name": "realmarketapi-scalping-playbook",
+          "title": "Scalping Playbook",
+          "description": "Runs a scalping routine on M1 and M5 with M15 context, tight risk and session filters. Use when the user wants very short-term trades lasting minutes.",
+          "tools": [
+            "get_candles",
+            "get_ema",
+            "get_rsi",
+            "get_support_resistance",
+            "get_volatility_heatmap",
+            "get_price"
+          ]
+        },
+        {
+          "name": "realmarketapi-day-trading-playbook",
+          "title": "Day Trading Playbook",
+          "description": "Runs an intraday routine with H4 bias, H1 structure and M15 entries, flat by the end of the session. Use when the user wants trades opened and closed within the day.",
+          "tools": [
+            "get_multi_timeframe",
+            "get_support_resistance",
+            "get_insight_setup",
+            "get_atr",
+            "GET /market-calendar"
+          ]
+        },
+        {
+          "name": "realmarketapi-swing-trading-playbook",
+          "title": "Swing Trading Playbook",
+          "description": "Runs a multi-day routine with D1 trend, H4 setups and H1 timing. Use when the user wants trades held for days to a few weeks.",
+          "tools": [
+            "get_multi_timeframe",
+            "get_ema",
+            "get_fibonacci",
+            "get_support_resistance",
+            "get_atr"
+          ]
+        },
+        {
+          "name": "realmarketapi-position-trading-playbook",
+          "title": "Position Trading Playbook",
+          "description": "Runs a long-horizon routine on the daily chart using the 50 and 200 period averages. Use when the user wants trades held for weeks to months.",
+          "tools": [
+            "get_sma",
+            "get_adx",
+            "get_history",
+            "get_atr"
+          ]
+        },
+        {
+          "name": "realmarketapi-breakout-strategy",
+          "title": "Breakout Strategy",
+          "description": "Trades a confirmed break of a well-tested level with volatility expansion. Use when price is compressing under resistance or above support and the user asks about a breakout.",
+          "tools": [
+            "get_support_resistance",
+            "get_bollinger_bands",
+            "get_candles",
+            "get_adx",
+            "get_stop_hunt_zones"
+          ]
+        },
+        {
+          "name": "realmarketapi-pullback-strategy",
+          "title": "Pullback Strategy",
+          "description": "Enters an established trend on a retracement to value. Use when a symbol is trending and the user asks where to join it.",
+          "tools": [
+            "get_insight_trend",
+            "get_ema",
+            "get_fibonacci",
+            "get_rsi",
+            "get_atr"
+          ]
+        },
+        {
+          "name": "realmarketapi-range-trading-strategy",
+          "title": "Range Trading Strategy",
+          "description": "Fades the edges of a defined range while trend strength is low. Use when a symbol is moving sideways and the user asks how to trade it.",
+          "tools": [
+            "get_insight_setup",
+            "get_adx",
+            "get_support_resistance",
+            "get_stochastic",
+            "get_atr"
+          ]
+        },
+        {
+          "name": "realmarketapi-mean-reversion-strategy",
+          "title": "Mean Reversion Strategy",
+          "description": "Trades a return to the mean after a statistical stretch from Bollinger Bands and RSI. Use when the user asks whether a move is overextended enough to fade.",
+          "tools": [
+            "get_bollinger_bands",
+            "get_rsi",
+            "get_adx",
+            "get_atr"
+          ]
+        },
+        {
+          "name": "realmarketapi-trend-following-strategy",
+          "title": "Trend Following Strategy",
+          "description": "Rides established trends with moving-average alignment and an ATR trailing stop. Use when the user wants a systematic way to stay with a trend.",
+          "tools": [
+            "get_ema",
+            "get_adx",
+            "get_atr",
+            "get_multi_timeframe"
+          ]
+        },
+        {
+          "name": "realmarketapi-momentum-strategy",
+          "title": "Momentum Strategy",
+          "description": "Buys strength and sells weakness when momentum, trend strength and order flow agree. Use when the user asks about a fast move and whether to trade in its direction.",
+          "tools": [
+            "get_macd",
+            "get_rsi",
+            "get_adx",
+            "get_orderflow_imbalance",
+            "get_anomaly"
+          ]
+        },
+        {
+          "name": "realmarketapi-ema-crossover-strategy",
+          "title": "EMA Crossover Strategy",
+          "description": "Trades the cross of a fast and slow EMA with a trend-strength filter. Use when the user asks for a simple rule-based crossover system.",
+          "tools": [
+            "get_ema",
+            "get_adx",
+            "get_atr"
+          ]
+        },
+        {
+          "name": "realmarketapi-rsi-reversal-strategy",
+          "title": "RSI Reversal Strategy",
+          "description": "Trades reversals from RSI extremes that are backed by divergence and a level. Use when the user asks for an oversold bounce or overbought fade with rules.",
+          "tools": [
+            "get_rsi",
+            "get_candles",
+            "get_support_resistance",
+            "get_atr"
+          ]
+        },
+        {
+          "name": "realmarketapi-bollinger-squeeze-strategy",
+          "title": "Bollinger Squeeze Strategy",
+          "description": "Trades the volatility expansion that follows a Bollinger Band squeeze. Use when bands are unusually narrow and the user asks how to position for the move.",
+          "tools": [
+            "get_bollinger_bands",
+            "get_volatility",
+            "get_macd",
+            "get_candles"
+          ]
+        },
+        {
+          "name": "realmarketapi-news-event-strategy",
+          "title": "News Event Strategy",
+          "description": "Plans around a scheduled high-impact event: stand aside, trade the reaction, or trade the retrace. Use when a major release is due and the user asks how to handle it.",
+          "tools": [
+            "GET /market-calendar",
+            "get_volatility_spikes",
+            "get_atr",
+            "get_support_resistance"
+          ]
+        },
+        {
+          "name": "realmarketapi-trade-plan-builder",
+          "title": "Trade Plan Builder",
+          "description": "Writes a complete trade plan with thesis, entry, stop, targets, size and management rules. Use when the user has a direction in mind and wants a plan they can follow.",
+          "tools": [
+            "get_price",
+            "get_support_resistance",
+            "get_atr",
+            "get_multi_timeframe",
+            "GET /market-calendar"
+          ]
+        },
+        {
+          "name": "realmarketapi-trade-management",
+          "title": "Trade Management",
+          "description": "Reviews an open position against live data and recommends hold, reduce, trail or exit. Use when the user is in a trade and asks what to do now.",
+          "tools": [
+            "get_price",
+            "get_atr",
+            "get_insight_next",
+            "get_orderflow_imbalance",
+            "get_support_resistance"
+          ]
+        },
+        {
+          "name": "realmarketapi-trade-journal",
+          "title": "Trade Journal",
+          "description": "Records trades with market conditions at entry and reviews them for patterns. Use when the user wants to log a trade or review past performance.",
+          "tools": [
+            "get_history",
+            "get_volatility",
+            "get_multi_timeframe"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "asset-specialists",
+      "title": "Asset Specialists",
+      "role": "Asset-class specialist",
+      "description": "Instrument-specific behaviour for metals, forex, crypto, energy, indices and stocks.",
+      "skills": [
+        {
+          "name": "realmarketapi-xauusd-specialist",
+          "title": "XAUUSD Gold Specialist",
+          "description": "Analyses gold with its own habits in mind: session behaviour, round numbers, dollar linkage and liquidity sweeps. Use when the symbol is XAUUSD or the user asks about gold.",
+          "tools": [
+            "get_price",
+            "get_multi_timeframe",
+            "get_liquidity_zones",
+            "get_stop_hunt_zones",
+            "get_volatility_heatmap",
+            "get_baseline_candles"
+          ]
+        },
+        {
+          "name": "realmarketapi-silver-specialist",
+          "title": "XAGUSD Silver Specialist",
+          "description": "Analyses silver and its relationship to gold through the gold-silver ratio. Use when the symbol is XAGUSD or the user asks about silver or the ratio.",
+          "tools": [
+            "get_price",
+            "get_history",
+            "get_atr",
+            "get_insight_trend"
+          ]
+        },
+        {
+          "name": "realmarketapi-forex-majors-specialist",
+          "title": "Forex Majors Specialist",
+          "description": "Analyses EURUSD, GBPUSD, USDJPY, AUDUSD, USDCAD and NZDUSD with the dollar as the common driver. Use when the user asks about a major pair or the major pairs as a group.",
+          "tools": [
+            "GET /price/category",
+            "get_multi_timeframe",
+            "get_support_resistance",
+            "GET /market-calendar"
+          ]
+        },
+        {
+          "name": "realmarketapi-jpy-pairs-specialist",
+          "title": "JPY Pairs Specialist",
+          "description": "Analyses USDJPY and GBPJPY with attention to their volatility, risk sensitivity and sharp reversals. Use when the user asks about yen pairs.",
+          "tools": [
+            "get_price",
+            "get_atr",
+            "get_multi_timeframe",
+            "get_volatility_spikes",
+            "get_stop_hunt_zones"
+          ]
+        },
+        {
+          "name": "realmarketapi-dxy-dollar-analyst",
+          "title": "Dollar Index Analyst",
+          "description": "Analyses the US dollar index and what it implies for forex, gold and risk assets. Use when the user asks about the dollar or needs a dollar view before another trade.",
+          "tools": [
+            "get_price",
+            "get_multi_timeframe",
+            "get_support_resistance",
+            "get_insight_trend"
+          ]
+        },
+        {
+          "name": "realmarketapi-bitcoin-specialist",
+          "title": "Bitcoin Specialist",
+          "description": "Analyses BTCUSD as a 24/7 market with weekend behaviour, round-number levels and high volatility. Use when the user asks about bitcoin.",
+          "tools": [
+            "get_price",
+            "get_multi_timeframe",
+            "get_liquidity_zones",
+            "get_volatility",
+            "get_sentiment"
+          ]
+        },
+        {
+          "name": "realmarketapi-altcoin-specialist",
+          "title": "Ethereum and Altcoin Specialist",
+          "description": "Analyses ETH, SOL, XRP, BNB, ADA, LINK, DOGE and CAKE relative to bitcoin. Use when the user asks about ethereum or an altcoin.",
+          "tools": [
+            "GET /price/category",
+            "get_price",
+            "get_insight_trend",
+            "get_atr",
+            "get_manipulation_risk"
+          ]
+        },
+        {
+          "name": "realmarketapi-crypto-market-breadth",
+          "title": "Crypto Market Breadth",
+          "description": "Measures how broad a crypto move is across all covered coins. Use when the user asks whether the whole crypto market is moving or only bitcoin.",
+          "tools": [
+            "GET /price/category",
+            "GET /price/24hr"
+          ]
+        },
+        {
+          "name": "realmarketapi-oil-specialist",
+          "title": "Crude Oil Specialist",
+          "description": "Analyses WTI and Brent crude and the spread between them. Use when the user asks about oil, USOIL or UKOIL.",
+          "tools": [
+            "get_price",
+            "get_multi_timeframe",
+            "get_support_resistance",
+            "get_volatility",
+            "GET /market-calendar"
+          ]
+        },
+        {
+          "name": "realmarketapi-commodities-specialist",
+          "title": "Commodities Specialist",
+          "description": "Analyses natural gas, platinum and copper. Use when the user asks about XNGUSD, XPTUSD or XCUUSD.",
+          "tools": [
+            "get_price",
+            "get_insight_trend",
+            "get_atr",
+            "get_support_resistance"
+          ]
+        },
+        {
+          "name": "realmarketapi-us-indices-specialist",
+          "title": "US Indices Specialist",
+          "description": "Analyses US500, US30 and USTEC together, including leadership between them. Use when the user asks about US stock indices.",
+          "tools": [
+            "get_price",
+            "get_multi_timeframe",
+            "get_support_resistance",
+            "get_volatility_heatmap",
+            "GET /market-calendar"
+          ]
+        },
+        {
+          "name": "realmarketapi-global-indices-specialist",
+          "title": "Global Indices Specialist",
+          "description": "Analyses European and Asia-Pacific indices: UK100, DE30, FR40, STOXX50, JP225, HK50, AUS200 and IN50. Use when the user asks about a non-US index or the global equity picture.",
+          "tools": [
+            "GET /price/category",
+            "get_multi_timeframe",
+            "get_support_resistance"
+          ]
+        },
+        {
+          "name": "realmarketapi-us-stocks-specialist",
+          "title": "US Stocks Specialist",
+          "description": "Analyses covered US stocks such as AAPL, MSFT, NVDA, TSLA, AMZN, GOOGL and META on price data. Use when the user asks for a technical view of a covered stock.",
+          "tools": [
+            "get_price",
+            "get_multi_timeframe",
+            "get_support_resistance",
+            "get_rsi",
+            "get_history"
+          ]
+        },
+        {
+          "name": "realmarketapi-intermarket-analysis",
+          "title": "Intermarket Analysis",
+          "description": "Reads the relationships between the dollar, gold, oil, equity indices and bitcoin to judge the macro tone. Use when the user asks what is driving markets or wants cross-market confirmation.",
+          "tools": [
+            "GET /price/market",
+            "get_history"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sessions-macro",
+      "title": "Session and Macro Analyst",
+      "role": "Macro analyst",
+      "description": "Trading sessions, the economic calendar, event risk and market regime.",
+      "skills": [
+        {
+          "name": "realmarketapi-market-sessions",
+          "title": "Market Sessions",
+          "description": "Reports which trading sessions are open, overlapping or about to open. Use when the user asks what session it is, when a market opens, or how timing affects a trade.",
+          "tools": [
+            "GET /market-calendar"
+          ]
+        },
+        {
+          "name": "realmarketapi-economic-calendar-briefing",
+          "title": "Economic Calendar Briefing",
+          "description": "Lists the day's high-impact economic events and the symbols they affect. Use when the user asks what is on the calendar or what could move the market today.",
+          "tools": [
+            "GET /market-calendar"
+          ]
+        },
+        {
+          "name": "realmarketapi-event-risk-filter",
+          "title": "Event Risk Filter",
+          "description": "Decides whether a planned trade falls inside a no-trade window around a scheduled event. Use before entering a trade or when scheduling automated strategies.",
+          "tools": [
+            "GET /market-calendar",
+            "get_volatility_spikes"
+          ]
+        },
+        {
+          "name": "realmarketapi-session-open-playbook",
+          "title": "Session Open Playbook",
+          "description": "Trades the break of the prior session's range at the London or New York open. Use when the user asks about an opening-range or session-breakout trade.",
+          "tools": [
+            "get_candles",
+            "GET /market-calendar",
+            "get_volatility_heatmap",
+            "get_stop_hunt_zones",
+            "get_atr"
+          ]
+        },
+        {
+          "name": "realmarketapi-risk-sentiment-gauge",
+          "title": "Risk Sentiment Gauge",
+          "description": "Scores market-wide risk appetite from indices, the dollar, gold, bitcoin and yen pairs. Use when the user asks whether markets are risk-on or risk-off.",
+          "tools": [
+            "GET /price/market",
+            "get_sentiment"
+          ]
+        },
+        {
+          "name": "realmarketapi-market-regime-classifier",
+          "title": "Market Regime Classifier",
+          "description": "Classifies a symbol as trending, ranging, volatile or quiet and names the tactics that fit. Use before choosing a strategy or when a strategy has stopped working.",
+          "tools": [
+            "get_adx",
+            "get_volatility",
+            "get_insight_setup",
+            "get_multi_timeframe"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "quant-research",
+      "title": "Quant Researcher",
+      "role": "Quant researcher",
+      "description": "Data preparation, backtests, performance metrics and statistical studies.",
+      "skills": [
+        {
+          "name": "realmarketapi-backtest-data-prep",
+          "title": "Backtest Data Preparation",
+          "description": "Builds a clean, gap-checked candle dataset ready for backtesting. Use when the user is about to test a strategy and needs reliable historical data first.",
+          "tools": [
+            "get_history",
+            "GET /me"
+          ]
+        },
+        {
+          "name": "realmarketapi-backtest-strategy-runner",
+          "title": "Backtest Strategy Runner",
+          "description": "Runs a rule-based strategy over historical candles and reports the result with costs. Use when the user describes entry and exit rules and asks how they would have performed.",
+          "tools": [
+            "get_history"
+          ]
+        },
+        {
+          "name": "realmarketapi-performance-metrics",
+          "title": "Performance Metrics",
+          "description": "Computes standard performance statistics from a list of trades or an equity curve. Use when the user has results and asks how good the strategy is.",
+          "tools": []
+        },
+        {
+          "name": "realmarketapi-seasonality-analysis",
+          "title": "Seasonality Analysis",
+          "description": "Measures average return and volatility by hour of day, day of week or month. Use when the user asks whether a symbol tends to behave differently at certain times.",
+          "tools": [
+            "get_history",
+            "get_volatility_heatmap"
+          ]
+        },
+        {
+          "name": "realmarketapi-returns-distribution",
+          "title": "Returns Distribution",
+          "description": "Describes the distribution of a symbol's returns, including tails and skew. Use when the user asks how large typical and extreme moves are.",
+          "tools": [
+            "get_history"
+          ]
+        },
+        {
+          "name": "realmarketapi-pairs-trading-scan",
+          "title": "Pairs Trading Scan",
+          "description": "Tests whether two related symbols have a stable spread and how stretched it is now. Use when the user asks about a relative-value trade between two instruments.",
+          "tools": [
+            "get_history",
+            "get_price"
+          ]
+        },
+        {
+          "name": "realmarketapi-relative-strength-ranking",
+          "title": "Relative Strength Ranking",
+          "description": "Ranks a set of symbols by performance over several lookback windows. Use when the user asks which instruments are strongest or weakest.",
+          "tools": [
+            "GET /price/24hr",
+            "get_history"
+          ]
+        },
+        {
+          "name": "realmarketapi-currency-strength-meter",
+          "title": "Currency Strength Meter",
+          "description": "Scores individual currencies by averaging their moves across all covered pairs. Use when the user asks which currency is strongest or wants the best pair to express a view.",
+          "tools": [
+            "GET /price/category",
+            "GET /price/24hr"
+          ]
+        },
+        {
+          "name": "realmarketapi-feature-engineering",
+          "title": "Feature Engineering",
+          "description": "Builds a model-ready feature table from candles and server-side indicators. Use when the user is preparing data for a machine-learning model.",
+          "tools": [
+            "get_history",
+            "get_rsi",
+            "get_macd",
+            "get_atr",
+            "get_volatility"
+          ]
+        },
+        {
+          "name": "realmarketapi-walk-forward-validation",
+          "title": "Walk-Forward Validation",
+          "description": "Tests a strategy across rolling train and test windows to check that results survive out of sample. Use when a backtest looks good and the user asks whether it is overfit.",
+          "tools": [
+            "get_history"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "screening-watchlists",
+      "title": "Screening and Watchlist Manager",
+      "role": "Portfolio assistant",
+      "description": "Market screener queries, watchlists, opportunity ranking and portfolio reviews.",
+      "skills": [
+        {
+          "name": "realmarketapi-market-screener",
+          "title": "Market Screener",
+          "description": "Queries the Market Screener for symbols matching trend, RSI, volatility and liquidity filters. Use when the user asks to find symbols that meet conditions.",
+          "tools": [
+            "POST /screener/query"
+          ]
+        },
+        {
+          "name": "realmarketapi-screener-recipes",
+          "title": "Screener Recipes",
+          "description": "Provides ready-made screener filters for common goals such as trend continuation, oversold bounces and quiet ranges. Use when the user wants ideas but has no filter in mind.",
+          "tools": [
+            "POST /screener/query"
+          ]
+        },
+        {
+          "name": "realmarketapi-opportunity-ranking",
+          "title": "Opportunity Ranking",
+          "description": "Ranks a shortlist of symbols by setup quality using insight score, confluence and risk. Use when the user has several candidates and asks which is best.",
+          "tools": [
+            "get_insight_score",
+            "get_insight_confluence",
+            "get_manipulation_risk",
+            "get_atr"
+          ]
+        },
+        {
+          "name": "realmarketapi-watchlist-builder",
+          "title": "Watchlist Builder",
+          "description": "Creates a watchlist and adds symbols to it through the Watchlist Hub. Use when the user asks to create, name or fill a watchlist.",
+          "tools": [
+            "GET /watchlists",
+            "POST /watchlists",
+            "POST /watchlists/{watchlistId}/items"
+          ]
+        },
+        {
+          "name": "realmarketapi-watchlist-review",
+          "title": "Watchlist Review",
+          "description": "Scans every symbol on a watchlist and flags the ones that need attention. Use when the user asks for a review of their watchlist or a morning check.",
+          "tools": [
+            "GET /watchlists",
+            "GET /price/market",
+            "get_insight_setup"
+          ]
+        },
+        {
+          "name": "realmarketapi-portfolio-health-check",
+          "title": "Portfolio Health Check",
+          "description": "Reviews a set of holdings for performance, concentration, correlation and trend health. Use when the user shares a portfolio and asks how it looks.",
+          "tools": [
+            "GET /price/market",
+            "get_history",
+            "get_insight_trend"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "alerts-monitoring",
+      "title": "Alerts and Monitoring Operator",
+      "role": "Monitoring agent",
+      "description": "Alert rules, live streams, watchdog loops and incident triage.",
+      "skills": [
+        {
+          "name": "realmarketapi-alert-creator",
+          "title": "Alert Creator",
+          "description": "Creates an alert rule in the Alert Center for a symbol, condition and delivery channel. Use when the user asks to be notified when something happens.",
+          "tools": [
+            "GET /alerts",
+            "POST /alerts"
+          ]
+        },
+        {
+          "name": "realmarketapi-alert-manager",
+          "title": "Alert Manager",
+          "description": "Lists, reviews and deletes alert rules. Use when the user asks what alerts they have or wants to clean them up.",
+          "tools": [
+            "GET /alerts",
+            "DELETE /alerts/{alertId}"
+          ]
+        },
+        {
+          "name": "realmarketapi-price-level-watch",
+          "title": "Price Level Watch",
+          "description": "Derives the levels worth watching on a symbol and turns them into alert proposals. Use when the user wants to stop watching the chart and be told when price reaches something important.",
+          "tools": [
+            "get_support_resistance",
+            "get_liquidity_zones",
+            "get_price",
+            "POST /alerts"
+          ]
+        },
+        {
+          "name": "realmarketapi-websocket-price-monitor",
+          "title": "WebSocket Price Monitor",
+          "description": "Watches live prices over the WebSocket stream instead of polling. Use when the user needs continuous live updates for one or more symbols on Plus or above.",
+          "tools": [
+            "WSS /price",
+            "WSS /market",
+            "GET /me"
+          ]
+        },
+        {
+          "name": "realmarketapi-market-watchdog",
+          "title": "Market Watchdog",
+          "description": "Runs a periodic check for anomalies, volatility spikes and risk changes across a set of symbols. Use when the user wants unattended monitoring with reports only when something matters.",
+          "tools": [
+            "GET /price/market",
+            "get_anomaly",
+            "get_volatility_spikes",
+            "get_manipulation_risk"
+          ]
+        },
+        {
+          "name": "realmarketapi-incident-triage",
+          "title": "Incident Triage",
+          "description": "Investigates a sudden move and reports what happened, how unusual it is and what state the market is in now. Use when the user asks what just happened to a symbol.",
+          "tools": [
+            "get_candles",
+            "get_anomaly",
+            "get_volatility_spikes",
+            "GET /market-calendar",
+            "GET /price/market"
+          ]
+        },
+        {
+          "name": "realmarketapi-telegram-bot-usage",
+          "title": "Telegram Bot Usage",
+          "description": "Explains how to use the RealMarketAPI Telegram bot for price queries and alerts without code. Use when the user wants prices or alerts on their phone or asks about the bot.",
+          "tools": [
+            "GET /alerts"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "reporting-content",
+      "title": "Reporting and Content Writer",
+      "role": "Market reporter",
+      "description": "Briefings, recaps, reports and plain-language explanations built on live data.",
+      "skills": [
+        {
+          "name": "realmarketapi-daily-market-brief",
+          "title": "Daily Market Brief",
+          "description": "Writes a short daily briefing across asset classes with movers, levels and the day's events. Use when the user asks for a daily market summary or morning note.",
+          "tools": [
+            "GET /price/market",
+            "GET /price/24hr",
+            "GET /market-calendar",
+            "get_support_resistance"
+          ]
+        },
+        {
+          "name": "realmarketapi-weekly-market-recap",
+          "title": "Weekly Market Recap",
+          "description": "Summarises the week's performance, ranges and notable moves and looks ahead to next week's events. Use when the user asks for a weekly review or outlook.",
+          "tools": [
+            "get_history",
+            "GET /price/market",
+            "GET /market-calendar",
+            "get_multi_timeframe"
+          ]
+        },
+        {
+          "name": "realmarketapi-session-briefing",
+          "title": "Session Briefing",
+          "description": "Prepares a pre-session note with overnight moves, levels and events for the session about to open. Use before the London or New York open.",
+          "tools": [
+            "get_candles",
+            "GET /market-calendar",
+            "get_support_resistance",
+            "GET /price/market"
+          ]
+        },
+        {
+          "name": "realmarketapi-technical-report-writer",
+          "title": "Technical Report Writer",
+          "description": "Writes a structured single-symbol technical report suitable for clients or publication. Use when the user asks for a full written analysis of one instrument.",
+          "tools": [
+            "get_price",
+            "get_multi_timeframe",
+            "get_support_resistance",
+            "get_rsi",
+            "get_macd",
+            "get_volatility",
+            "get_insight_confluence"
+          ]
+        },
+        {
+          "name": "realmarketapi-social-post-writer",
+          "title": "Social Post Writer",
+          "description": "Writes short market updates for social platforms from live data. Use when the user asks for a tweet, post or caption about a market move.",
+          "tools": [
+            "get_price",
+            "GET /price/24hr",
+            "get_support_resistance"
+          ]
+        },
+        {
+          "name": "realmarketapi-newsletter-writer",
+          "title": "Newsletter Writer",
+          "description": "Writes a market newsletter issue with a lead story, a data section and a look ahead. Use when the user asks for newsletter or email content about markets.",
+          "tools": [
+            "GET /price/market",
+            "get_history",
+            "GET /market-calendar",
+            "get_insight_trend"
+          ]
+        },
+        {
+          "name": "realmarketapi-plain-language-explainer",
+          "title": "Plain-Language Explainer",
+          "description": "Explains what a market reading means in simple terms for a beginner, using the live value as the example. Use when the user is new to trading or asks what an indicator or term means.",
+          "tools": [
+            "get_price",
+            "get_rsi",
+            "get_insight_trend"
+          ]
+        },
+        {
+          "name": "realmarketapi-chart-data-export",
+          "title": "Chart Data Export",
+          "description": "Prepares candle and indicator data in the shape a charting library or spreadsheet expects. Use when the user wants to plot data or hand it to another tool.",
+          "tools": [
+            "get_candles",
+            "get_history",
+            "get_sma",
+            "get_bollinger_bands"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "developer-integration",
+      "title": "Developer and Integration Engineer",
+      "role": "Coding agent",
+      "description": "REST, WebSocket, MCP and SDK integration, plus app and bot scaffolds.",
+      "skills": [
+        {
+          "name": "realmarketapi-rest-integration",
+          "title": "REST Integration",
+          "description": "Integrates the RealMarketAPI REST API into an application with correct auth, conventions and error handling. Use when writing or reviewing code that calls the REST endpoints directly.",
+          "tools": [
+            "GET /price",
+            "GET /candle",
+            "GET /history",
+            "GET /me"
+          ]
+        },
+        {
+          "name": "realmarketapi-websocket-integration",
+          "title": "WebSocket Integration",
+          "description": "Implements a resilient WebSocket client for the price, candles, market, multi-timeframe and order-flow streams. Use when building live-updating features.",
+          "tools": [
+            "WSS /price",
+            "WSS /candles",
+            "WSS /market",
+            "WSS /multi-timeframe",
+            "WSS /orderflow/imbalance"
+          ]
+        },
+        {
+          "name": "realmarketapi-mcp-client-setup",
+          "title": "MCP Client Setup",
+          "description": "Connects an MCP-compatible client such as Claude Desktop, Claude Code or Cursor to the RealMarketAPI MCP server. Use when the user wants their AI assistant to call market tools directly.",
+          "tools": [
+            "get_symbols",
+            "get_price"
+          ]
+        },
+        {
+          "name": "realmarketapi-dotnet-sdk",
+          "title": ".NET SDK",
+          "description": "Uses the official RealMarketAPI.Sdk NuGet package with dependency injection, typed clients and async streams. Use when integrating from C# or any .NET application.",
+          "tools": [
+            "GET /price",
+            "GET /candle",
+            "WSS /price"
+          ]
+        },
+        {
+          "name": "realmarketapi-javascript-sdk",
+          "title": "JavaScript and TypeScript SDK",
+          "description": "Uses the realmarketapi-js-sdk-beta npm package from Node.js. Use when integrating from JavaScript or TypeScript on the server.",
+          "tools": [
+            "GET /price",
+            "GET /candle",
+            "WSS /price"
+          ]
+        },
+        {
+          "name": "realmarketapi-python-sdk",
+          "title": "Python SDK",
+          "description": "Uses the realmarketapi-python-sdk-beta PyPI package for REST and WebSocket access. Use when integrating from Python scripts, notebooks or services.",
+          "tools": [
+            "GET /price",
+            "GET /candle",
+            "GET /history",
+            "WSS /price"
+          ]
+        },
+        {
+          "name": "realmarketapi-trading-bot-scaffold",
+          "title": "Trading Bot Scaffold",
+          "description": "Scaffolds a signal or alert bot with a data layer, strategy module, risk checks and notifier. Use when the user asks to build a bot on RealMarketAPI.",
+          "tools": [
+            "GET /price",
+            "GET /candle",
+            "GET /signals/strategy",
+            "WSS /price"
+          ]
+        },
+        {
+          "name": "realmarketapi-dashboard-builder",
+          "title": "Dashboard Builder",
+          "description": "Builds a market dashboard with a server-side proxy, live prices and charts. Use when the user asks for a web dashboard, ticker or chart page on RealMarketAPI data.",
+          "tools": [
+            "GET /price/market",
+            "GET /candle",
+            "WSS /market"
+          ]
+        },
+        {
+          "name": "realmarketapi-data-pipeline",
+          "title": "Data Pipeline",
+          "description": "Designs an ingestion job that stores candles in a database and keeps them current. Use when the user wants their own copy of market data for analytics or apps.",
+          "tools": [
+            "GET /history",
+            "GET /candle",
+            "GET /me"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "agent-teams",
+      "title": "Multi-Agent Trading Team",
+      "role": "Team role",
+      "description": "Role prompts for a research and trading desk: orchestrator, researchers, risk, compliance and portfolio manager.",
+      "skills": [
+        {
+          "name": "realmarketapi-team-orchestrator",
+          "title": "Team Orchestrator",
+          "description": "Coordinates a team of specialist agents through research, debate, risk review and decision. Use when running a multi-agent workflow on a symbol or a watchlist.",
+          "tools": [
+            "GET /me"
+          ]
+        },
+        {
+          "name": "realmarketapi-bull-researcher",
+          "title": "Bull Researcher",
+          "description": "Builds the strongest evidence-based case for a long position. Use inside a debate workflow, or when the user wants the bullish argument tested properly.",
+          "tools": [
+            "get_insight_confluence",
+            "get_multi_timeframe",
+            "get_support_resistance",
+            "get_orderflow_imbalance"
+          ]
+        },
+        {
+          "name": "realmarketapi-bear-researcher",
+          "title": "Bear Researcher",
+          "description": "Builds the strongest evidence-based case for a short position or for staying out. Use inside a debate workflow, or when the user wants a view challenged.",
+          "tools": [
+            "get_insight_confluence",
+            "get_multi_timeframe",
+            "get_support_resistance",
+            "get_manipulation_risk",
+            "get_sentiment"
+          ]
+        },
+        {
+          "name": "realmarketapi-risk-officer",
+          "title": "Risk Officer",
+          "description": "Reviews a proposed trade against risk limits and has the authority to reduce or reject it. Use after a trade idea is formed and before it is approved.",
+          "tools": [
+            "get_atr",
+            "get_volatility",
+            "get_manipulation_risk",
+            "get_stop_hunt_zones",
+            "GET /market-calendar"
+          ]
+        },
+        {
+          "name": "realmarketapi-portfolio-manager",
+          "title": "Portfolio Manager",
+          "description": "Makes the final call after hearing the research, the debate and the risk review. Use as the last decision step in a multi-agent workflow.",
+          "tools": [
+            "get_price"
+          ]
+        },
+        {
+          "name": "realmarketapi-execution-planner",
+          "title": "Execution Planner",
+          "description": "Turns an approved decision into a precise order ticket for a human or a broker integration to place. Use after a trade is approved and before it is entered.",
+          "tools": [
+            "get_price",
+            "get_atr",
+            "get_volatility_heatmap",
+            "GET /market-calendar"
+          ]
+        },
+        {
+          "name": "realmarketapi-compliance-reviewer",
+          "title": "Compliance Reviewer",
+          "description": "Reviews market content before it reaches an audience for unsupported claims, promises and missing risk disclosure. Use before publishing analysis, signals or marketing that mentions market performance.",
+          "tools": []
+        }
+      ]
+    }
+  ]
+}

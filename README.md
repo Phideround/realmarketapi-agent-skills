@@ -1,6 +1,6 @@
 # RealMarketAPI Agent Skills
 
-<!-- count -->161<!-- /count --> ready-to-use [Agent Skills](https://agentskills.io) that teach AI agents how to work with [RealMarketAPI](https://realmarketapi.com): real-time and historical market data for forex, metals, crypto, commodities, indices and stocks, with server-side indicators, volatility analytics and market-structure signals.
+<!-- count -->162<!-- /count --> ready-to-use [Agent Skills](https://agentskills.io) that teach AI agents how to work with [RealMarketAPI](https://realmarketapi.com): real-time and historical market data for forex, metals, crypto, commodities, indices and stocks, with server-side indicators, volatility analytics and market-structure signals.
 
 Each skill is a folder with a `SKILL.md` file: a short description that tells the agent when to use it, the exact MCP tools and REST routes to call, a step-by-step workflow, the output to produce and the mistakes to avoid. They work in Claude Code, Claude Desktop, Cursor, Codex, Gemini CLI, GitHub Copilot and any other agent that reads the `SKILL.md` format.
 
@@ -10,7 +10,7 @@ Each skill is a folder with a `SKILL.md` file: a short description that tells th
 | Category | Agent role | Skills | Covers |
 |---|---|---|---|
 | [Foundations](CATALOG.md#foundations) | Any agent | 9 | Setup, routing, plan awareness and data hygiene that every other skill builds on. |
-| [Market Data Analyst](CATALOG.md#market-data) | Market data analyst | 14 | Live quotes, snapshots, candles, history and descriptive statistics. |
+| [Market Data Analyst](CATALOG.md#market-data) | Market data analyst | 15 | Live quotes, snapshots, candles, history and descriptive statistics. |
 | [Technical Analyst](CATALOG.md#technical-analysis) | Technical analyst | 21 | Indicator reads, levels, patterns and multi-timeframe alignment. |
 | [Risk and Volatility Manager](CATALOG.md#risk-volatility) | Risk manager | 14 | Volatility regimes, position sizing, stops, targets and portfolio risk. |
 | [Market Structure Analyst](CATALOG.md#market-structure) | Market structure analyst | 10 | Liquidity, stop hunts, order flow, anomalies and smart-money concepts. |
@@ -64,7 +64,7 @@ Skills describe the workflow. The data comes from RealMarketAPI, over either tra
 
 | Transport | Endpoint | Plan |
 |---|---|---|
-| MCP server (33 tools) | `https://ai.realmarketapi.com/mcp?apiKey=YOUR_API_KEY` | Pro and above |
+| MCP server (35 tools) | `https://ai.realmarketapi.com/mcp?apiKey=YOUR_API_KEY` | Pro and above |
 | REST | `https://api.realmarketapi.com/api/v1/<route>?apiKey=YOUR_API_KEY` | All plans, routes gated by plan |
 | WebSocket | `wss://api.realmarketapi.com/<stream>?apiKey=YOUR_API_KEY` | Plus and above |
 

@@ -62,6 +62,7 @@ Live quotes, snapshots, candles, history and descriptive statistics.
 
 - `realmarketapi-market-context`: Builds a quick picture of where a symbol stands right now: last price, 24h baseline, recent candles and position in the day's range.
 - `realmarketapi-live-price-quote`: Returns the latest price, bid, ask and spread for one symbol.
+- `realmarketapi-cross-rates`: Prices a pair that is not listed directly, such as gold in Vietnamese dong, EURJPY or BTC in ETH, by deriving it from listed pairs, and shows the legs used.
 - `realmarketapi-market-snapshot`: Summarises every symbol on the plan in one call with hourly and daily change.
 - `realmarketapi-category-snapshot`: Summarises one asset class such as forex, crypto, stocks, indices or commodities.
 - `realmarketapi-daily-stats-24h`: Reports 24-hour open, high, low, volume and percentage change per symbol.

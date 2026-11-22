@@ -28,7 +28,7 @@ Uses the official RealMarketAPI.Sdk NuGet package with dependency injection, typ
 
 1. Install with `dotnet add package RealMarketAPI.Sdk`.
 2. Register with `builder.Services.AddRealMarketApiClient(...)`, taking the key from configuration or user secrets.
-3. Call typed groups such as `client.Ticker.GetPriceAsync`, `client.Indicators.GetRsiAsync`, `client.Insight.GetConfluenceAsync` and `client.MultiTimeframe.GetAsync`.
+3. Call typed groups such as `client.Ticker.GetPriceAsync`, `client.Indicators.GetRsiAsync`, `client.Insight.GetConfluenceAsync`, `client.MultiTimeframe.GetAsync`, and `client.Ticker.GetCrossPriceAsync` / `client.Symbols.GetCrossSymbolsAsync` for cross rates.
 4. Stream with `await foreach` over `client.WebSocket.StreamPriceAsync(symbol, timeFrame, ct)` and pass a cancellation token.
 5. Check the package README for the current method list.
 

@@ -22,6 +22,7 @@ Aggregates open positions into net exposure by currency, asset class and directi
 
 | MCP tool | REST equivalent |
 |---|---|
+| `get_cross_price` | `GET /api/v1/price/cross` |
 | `get_atr` | `GET /api/v1/indicator/atr` |
 
 REST and WebSocket only (no MCP tool):
@@ -31,7 +32,7 @@ REST and WebSocket only (no MCP tool):
 ## Workflow
 
 1. Take the list of positions with size, direction and stop.
-2. Price them with one `GET /api/v1/price/market` call and convert to the account currency.
+2. Price them with one `GET /api/v1/price/market` call and convert to the account currency, using `get_cross_price` for a rate that is not listed (for example USD into VND).
 3. Split forex pairs into their two currencies and net the exposure per currency; group the rest by asset class.
 4. Sum money at risk to stops and show it as a percentage of the account.
 

@@ -61,7 +61,7 @@ export const developer = {
       [
         "Install with `dotnet add package RealMarketAPI.Sdk`.",
         "Register with `builder.Services.AddRealMarketApiClient(...)`, taking the key from configuration or user secrets.",
-        "Call typed groups such as `client.Ticker.GetPriceAsync`, `client.Indicators.GetRsiAsync`, `client.Insight.GetConfluenceAsync` and `client.MultiTimeframe.GetAsync`.",
+        "Call typed groups such as `client.Ticker.GetPriceAsync`, `client.Indicators.GetRsiAsync`, `client.Insight.GetConfluenceAsync`, `client.MultiTimeframe.GetAsync`, and `client.Ticker.GetCrossPriceAsync` / `client.Symbols.GetCrossSymbolsAsync` for cross rates.",
         "Stream with `await foreach` over `client.WebSocket.StreamPriceAsync(symbol, timeFrame, ct)` and pass a cancellation token.",
         "Check the package README for the current method list.",
       ],
@@ -76,7 +76,7 @@ export const developer = {
       ["GET /price", "GET /candle", "WSS /price"],
       [
         "Install with `npm install realmarketapi-js-sdk-beta@beta` on Node.js 20 or later.",
-        "Create `new RealMarketApiClient({ ... })` with the key from `process.env` and call methods such as `client.getPrice(symbol, timeFrame)` and `client.getSymbols()`.",
+        "Create `new RealMarketApiClient({ ... })` with the key from `process.env` and call methods such as `client.getPrice(symbol, timeFrame)`, `client.getSymbols()` and, for cross rates such as XAUVND, `client.getCrossPrice(symbolCode, timeFrame)` and `client.getCrossSymbols(baseCurrency, quoteCurrency)`.",
         "Use `RealMarketApiWebSocket` for streams.",
         "The beta SDK covers a subset of the API; call REST directly for routes it lacks, and check the README for the current list.",
       ],
@@ -92,7 +92,7 @@ export const developer = {
       [
         "Install with `pip install realmarketapi-python-sdk-beta` on Python 3.9 or later.",
         "Import `RealMarketApiClient` from `realmarketapi_sdk`, create it with `api_key` from the environment, and close it when done.",
-        "Call `get_price`, `get_candles`, `get_history`, `get_symbols` and `get_sma`; use `RealMarketApiWebSocket` with asyncio for streams.",
+        "Call `get_price`, `get_candles`, `get_history`, `get_symbols`, `get_sma`, and `get_cross_price` / `get_cross_symbols` for cross rates; use `RealMarketApiWebSocket` with asyncio for streams.",
         "The beta SDK covers a subset of the API; use `httpx` against REST for the rest, and check the README for the current list.",
       ],
       ["A script or notebook cell that fetches and prints data.", "Conversion to a pandas DataFrame when analysis follows."],

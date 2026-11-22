@@ -36,6 +36,23 @@ export default {
       ["Price of XAUUSD?", "What is EURUSD trading at?"],
     ),
     sk(
+      "cross-rates",
+      "Cross Rates",
+      "Prices a pair that is not listed directly, such as gold in Vietnamese dong, EURJPY or BTC in ETH, by deriving it from listed pairs, and shows the legs used. Use when the user wants a price in a local or non-USD currency, asks for a cross pair, or asks which crosses are available.",
+      ["get_cross_price", "list_cross_symbols", "get_symbols"],
+      [
+        "Check `get_symbols` first: if the pair is listed directly, quote it with `get_price` instead.",
+        "Build the code as BASE+QUOTE currency codes (gold in dong is XAUVND, yen per euro is EURJPY). If unsure it can be derived, call `list_cross_symbols` with `baseCurrency` or `quoteCurrency` to filter; it needs no API key and lists only derivable pairs, not listed ones.",
+        "Call `get_cross_price` with `symbolCode` and `timeFrame` (M1 for a live quote). It is one request against quota however many legs it uses.",
+        "Read `bid`, `ask`, `closePrice` and `openTime`, then list each leg from `legs[]` with its `symbolCode`, whether it was `inverted`, and its own `openTime`. For example XAUVND = XAUUSD x USDVND, VNDUSD = 1 / USDVND, BTCETH = BTCUSD / ETHUSD.",
+        "Explain the quote: bid multiplies the legs' bids and ask multiplies their asks, with an inverted leg's bid and ask swapped, so the spread is the legs' spreads combined. `openTime` is the oldest leg's candle, so the cross is only as fresh as its stalest leg; flag it when one leg's market is closed.",
+        "On `ERR_0008_SYMBOL_NOT_SUPPORTED` the pair cannot be derived or a leg is not on the plan; on `ERR_0007` the timeframe is not on the plan; on `ERR_0001` a leg has no price yet. Say which and suggest the nearest available cross.",
+      ],
+      ["Cross price, bid, ask, spread and `openTime` in UTC, with the unit (for example VND per troy ounce).", "The legs used, each with its own price, inversion flag and time."],
+      ["Multiplying two `get_price` calls yourself when `get_cross_price` does it in one request with the correct bid and ask.", "Asking for high, low or volume on a cross; only bid, ask, open and close are returned.", "Treating stocks, indices or oil as currencies; only forex, metal and crypto symbols can be legs."],
+      ["What is gold in Vietnamese dong right now?", "Price EURJPY and show me how it was derived.", "Which crosses can I get against THB?"],
+    ),
+    sk(
       "market-snapshot",
       "Market Snapshot",
       "Summarises every symbol on the plan in one call with hourly and daily change. Use when the user asks how the market is doing overall or wants a cross-asset overview.",

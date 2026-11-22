@@ -14,6 +14,8 @@ const MCP = {
   get_symbols: "/symbol",
   get_timeframes: "/me (timeframes on your plan)",
   get_price: "/price",
+  get_cross_price: "/price/cross",
+  list_cross_symbols: "/symbol/cross",
   get_candles: "/candle",
   get_history: "/history",
   get_baseline_candles: "/market/baseline-candles-hourly",
@@ -63,6 +65,9 @@ const GUARDRAILS = `## Guardrails
 - RealMarketAPI provides market data and analytics only. It does not place orders, hold funds or supply news, fundamentals or order-book depth.
 - Output is informational, not investment advice. State the invalidation level and the main risk with any directional view.`
 
+/** MCP tool names are snake_case words ("get_rsi", "list_cross_symbols"); everything else is a route. */
+const isMcp = (t) => /^[a-z]+(_[a-z0-9]+)+$/.test(t)
+
 const errors = []
 const seen = new Set()
 const all = []
@@ -76,8 +81,8 @@ for (const cat of categories) {
     if (s.desc.length > 1024) errors.push(`description too long: ${name}`)
     if (!/. Use /.test(s.desc)) errors.push(`description lacks a trigger: ${name}`)
     for (const t of s.tools) {
-      if (t.startsWith("get_") && !MCP[t]) errors.push(`unknown MCP tool ${t} in ${name}`)
-      if (!t.startsWith("get_") && !/^(GET|POST|DELETE|WSS) \//.test(t)) errors.push(`bad tool ${t} in ${name}`)
+      if (isMcp(t) && !MCP[t]) errors.push(`unknown MCP tool ${t} in ${name}`)
+      if (!isMcp(t) && !/^(GET|POST|DELETE|WSS) \//.test(t)) errors.push(`bad tool ${t} in ${name}`)
     }
     all.push({ ...s, name, category: cat.id, categoryTitle: cat.title, role: cat.role })
   }
@@ -90,8 +95,8 @@ if (errors.length) {
 const list = (items) => items.map((i) => `- ${i}`).join("\n")
 
 function dataSources(s) {
-  const mcp = s.tools.filter((t) => t.startsWith("get_"))
-  const rest = s.tools.filter((t) => !t.startsWith("get_"))
+  const mcp = s.tools.filter(isMcp)
+  const rest = s.tools.filter((t) => !isMcp(t))
   const parts = []
   if (mcp.length) {
     parts.push(

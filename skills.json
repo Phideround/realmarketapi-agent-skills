@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "repository": "https://github.com/Phideround/realmarketapi-agent-skills",
-  "total": 161,
+  "total": 162,
   "categories": [
     {
       "id": "foundations",
@@ -38,7 +38,8 @@
           "title": "Symbol Resolver",
           "description": "Maps everyday instrument names such as gold, bitcoin, cable or the S&P 500 to exact RealMarketAPI symbol codes. Use when the user names an asset in plain language or uses a broker-specific ticker.",
           "tools": [
-            "get_symbols"
+            "get_symbols",
+            "list_cross_symbols"
           ]
         },
         {
@@ -108,6 +109,16 @@
           "description": "Returns the latest price, bid, ask and spread for one symbol. Use when the user only wants the current price or a quick quote.",
           "tools": [
             "get_price"
+          ]
+        },
+        {
+          "name": "realmarketapi-cross-rates",
+          "title": "Cross Rates",
+          "description": "Prices a pair that is not listed directly, such as gold in Vietnamese dong, EURJPY or BTC in ETH, by deriving it from listed pairs, and shows the legs used. Use when the user wants a price in a local or non-USD currency, asks for a cross pair, or asks which crosses are available.",
+          "tools": [
+            "get_cross_price",
+            "list_cross_symbols",
+            "get_symbols"
           ]
         },
         {
@@ -460,6 +471,7 @@
           "description": "Calculates position size from account balance, risk percentage and stop distance. Use when the user asks how much to trade or how many lots, units or shares to take.",
           "tools": [
             "get_price",
+            "get_cross_price",
             "get_atr"
           ]
         },
@@ -526,6 +538,7 @@
           "description": "Aggregates open positions into net exposure by currency, asset class and direction. Use when the user lists positions and asks about concentration or total risk.",
           "tools": [
             "GET /price/market",
+            "get_cross_price",
             "get_atr"
           ]
         },

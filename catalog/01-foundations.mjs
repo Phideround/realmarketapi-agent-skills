@@ -56,11 +56,12 @@ export default {
       "symbol-resolver",
       "Symbol Resolver",
       "Maps everyday instrument names such as gold, bitcoin, cable or the S&P 500 to exact RealMarketAPI symbol codes. Use when the user names an asset in plain language or uses a broker-specific ticker.",
-      ["get_symbols"],
+      ["get_symbols", "list_cross_symbols"],
       [
         "Call `get_symbols` and match the user's wording against `symbolCode` and `displayName`.",
         "Apply common aliases: gold XAUUSD, silver XAGUSD, cable GBPUSD, dollar index DXY, WTI USOIL, Brent UKOIL, S&P 500 US500, Dow US30, Nasdaq USTEC, DAX DE30.",
         "If more than one symbol fits, list the candidates with their market class and ask which one is meant.",
+        "If the user wants an unlisted currency pair such as gold in VND or EURJPY, check `list_cross_symbols` and use the cross-rates skill.",
         "If nothing matches, say the symbol is not covered and offer the nearest covered proxy.",
       ],
       ["The resolved `symbolCode`, display name and market class.", "Alternatives when the match is ambiguous."],

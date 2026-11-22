@@ -27,7 +27,7 @@ Uses the realmarketapi-js-sdk-beta npm package from Node.js. Use when integratin
 ## Workflow
 
 1. Install with `npm install realmarketapi-js-sdk-beta@beta` on Node.js 20 or later.
-2. Create `new RealMarketApiClient({ ... })` with the key from `process.env` and call methods such as `client.getPrice(symbol, timeFrame)` and `client.getSymbols()`.
+2. Create `new RealMarketApiClient({ ... })` with the key from `process.env` and call methods such as `client.getPrice(symbol, timeFrame)`, `client.getSymbols()` and, for cross rates such as XAUVND, `client.getCrossPrice(symbolCode, timeFrame)` and `client.getCrossSymbols(baseCurrency, quoteCurrency)`.
 3. Use `RealMarketApiWebSocket` for streams.
 4. The beta SDK covers a subset of the API; call REST directly for routes it lacks, and check the README for the current list.
 

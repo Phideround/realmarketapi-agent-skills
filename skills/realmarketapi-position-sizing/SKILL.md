@@ -23,13 +23,14 @@ Calculates position size from account balance, risk percentage and stop distance
 | MCP tool | REST equivalent |
 |---|---|
 | `get_price` | `GET /api/v1/price` |
+| `get_cross_price` | `GET /api/v1/price/cross` |
 | `get_atr` | `GET /api/v1/indicator/atr` |
 
 ## Workflow
 
 1. Collect account balance, account currency, risk percent (default 1%) and the stop level or stop distance.
 2. If no stop is given, propose 1.5 times `get_atr` on the execution timeframe.
-3. Size equals account risk divided by stop distance times value per unit. For forex convert pip value into the account currency using a live `get_price`.
+3. Size equals account risk divided by stop distance times value per unit. For forex convert pip value into the account currency using a live `get_price`, or `get_cross_price` when no listed pair joins the quote and account currencies (for example a JPY-quoted pair in a VND account).
 4. Round down to the instrument's lot step and show the money at risk at that size.
 
 ## Output

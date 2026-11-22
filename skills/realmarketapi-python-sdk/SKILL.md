@@ -29,7 +29,7 @@ Uses the realmarketapi-python-sdk-beta PyPI package for REST and WebSocket acces
 
 1. Install with `pip install realmarketapi-python-sdk-beta` on Python 3.9 or later.
 2. Import `RealMarketApiClient` from `realmarketapi_sdk`, create it with `api_key` from the environment, and close it when done.
-3. Call `get_price`, `get_candles`, `get_history`, `get_symbols` and `get_sma`; use `RealMarketApiWebSocket` with asyncio for streams.
+3. Call `get_price`, `get_candles`, `get_history`, `get_symbols`, `get_sma`, and `get_cross_price` / `get_cross_symbols` for cross rates; use `RealMarketApiWebSocket` with asyncio for streams.
 4. The beta SDK covers a subset of the API; use `httpx` against REST for the rest, and check the README for the current list.
 
 ## Output

@@ -23,13 +23,15 @@ Maps everyday instrument names such as gold, bitcoin, cable or the S&P 500 to ex
 | MCP tool | REST equivalent |
 |---|---|
 | `get_symbols` | `GET /api/v1/symbol` |
+| `list_cross_symbols` | `GET /api/v1/symbol/cross` |
 
 ## Workflow
 
 1. Call `get_symbols` and match the user's wording against `symbolCode` and `displayName`.
 2. Apply common aliases: gold XAUUSD, silver XAGUSD, cable GBPUSD, dollar index DXY, WTI USOIL, Brent UKOIL, S&P 500 US500, Dow US30, Nasdaq USTEC, DAX DE30.
 3. If more than one symbol fits, list the candidates with their market class and ask which one is meant.
-4. If nothing matches, say the symbol is not covered and offer the nearest covered proxy.
+4. If the user wants an unlisted currency pair such as gold in VND or EURJPY, check `list_cross_symbols` and use the cross-rates skill.
+5. If nothing matches, say the symbol is not covered and offer the nearest covered proxy.
 
 ## Output
 
